@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('admin/pengguna', UserController::class);
+    Route::resource('admin/karyawan', KaryawanController::class);
 });
 Route::middleware(['auth', 'role:karyawan'])->group(function () {});
 
