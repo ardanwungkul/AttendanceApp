@@ -1,5 +1,5 @@
 <div class="h-screen flex flex-row fixed">
-    <div class="flex flex-col w-56 bg-gray-50 rounded-r-3xl overflow-hidden shadow-lg pt-4">
+    <div class="flex flex-col w-56 bg-gray-50 rounded-r-lg overflow-hidden shadow-lg pt-4">
         <div class="flex flex-col items-center justify-center h-20">
             <h1 class="text-3xl uppercase text-indigo-500">BD</h1>
             <p>Budi Abadi</p>
@@ -16,7 +16,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('users.index') }}"
                         class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
                         <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i
                                 class="fa-solid fa-users"></i></span>
