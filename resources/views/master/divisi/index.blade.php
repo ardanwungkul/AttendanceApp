@@ -1,34 +1,32 @@
 <x-app-layout>
-    <x-slot name="header">Daftar Pengguna</x-slot>
+    <x-slot name="header">Daftar Divisi</x-slot>
     <div class="pb-4 relative pt-5">
         <div class="pb-5">
-            <a href="{{ route('pengguna.create') }}"
+            <a href="{{ route('divisi.create') }}"
                 class="px-5 py-2 bg-mineral-green-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Tambah
-                Pengguna</a>
+                Divisi</a>
         </div>
         <table class="w-full border rounded-lg overflow-hidden" id="datatable">
             <thead class="bg-mineral-green-200 font-bold">
                 <tr>
                     <td class="!text-center w-10">No</td>
-                    <td>Username</td>
-                    <td>Role</td>
+                    <td>Nama Divisi</td>
                     <td class="!text-center !w-48">Aksi</td>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($pengguna as $item)
+                @foreach ($divisi as $item)
                     <tr>
                         <td class="text-center">{{ $loop->index + 1 }}</td>
-                        <td>{{ $item->username }}</td>
-                        <td class="capitalize">{{ $item->role }}</td>
+                        <td>{{ $item->nama_divisi }}</td>
                         <td class="flex justify-center items-end gap-3 text-xs">
-                            <a href="{{ route('pengguna.edit', $item->id) }}"
+                            <a href="{{ route('divisi.edit', $item->id) }}"
                                 class="bg-blue-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
                                 <i class="fa-solid fa-pen"></i>
                                 <span> Edit
                                 </span>
                             </a>
-                            <form action="{{ route('pengguna.destroy', $item->id) }}" method="POST">
+                            <form action="{{ route('divisi.destroy', $item->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"

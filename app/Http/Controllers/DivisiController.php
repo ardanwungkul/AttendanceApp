@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Divisi;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class DivisiController extends Controller
 {
@@ -12,7 +13,8 @@ class DivisiController extends Controller
      */
     public function index()
     {
-        //
+        $divisi = Divisi::all();
+        return view('master.divisi.index', compact('divisi'));
     }
 
     /**
@@ -20,7 +22,7 @@ class DivisiController extends Controller
      */
     public function create()
     {
-        //
+        return view('master.divisi.create');
     }
 
     /**
@@ -28,7 +30,13 @@ class DivisiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_divisi' => 'required|unique:divisis',
+        ]);
+        $divisi = new Divisi();
+        $divisi->nama_divisi = $request->nama_divisi;
+        $divisi->save();
+        return redirect()->route('divisi.index')->with(['success' => 'Berhasil Menambahkan Divisi']);
     }
 
     /**
@@ -44,7 +52,7 @@ class DivisiController extends Controller
      */
     public function edit(Divisi $divisi)
     {
-        //
+        return view('master.divisi.edit', compact('divisi'));
     }
 
     /**
@@ -52,7 +60,15 @@ class DivisiController extends Controller
      */
     public function update(Request $request, Divisi $divisi)
     {
-        //
+        $request->validate([
+            'nama_divisi' => [
+                'required',
+                Rule::unique('divisis')->ignore($divisi->id),
+            ],
+        ]);
+        $divisi->nama_divisi = $request->nama_divisi;
+        $divisi->save();
+        return redirect()->route('divisi.index')->with(['success' => 'Berhasil Mengubah Divisi']);
     }
 
     /**
@@ -60,6 +76,7 @@ class DivisiController extends Controller
      */
     public function destroy(Divisi $divisi)
     {
-        //
+        $divisi->delete();
+        return redirect()->route('divisi.index')->with(['success' => 'Berhasil Menghapus Divisi']);
     }
 }
