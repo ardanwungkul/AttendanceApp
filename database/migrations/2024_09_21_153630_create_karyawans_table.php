@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('karyawans', function (Blueprint $table) {
-            $table->id();
-            $table->string('karyawan');
+            $table->string('nip',9)->primary();
+            $table->string('nama_lengkap');
             $table->enum('jenis_kelamin', ['Laki Laki', 'Perempuan']);
+            $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
             $table->unsignedBigInteger('divisi_id');
             $table->foreign('divisi_id')->references('id')->on('divisis')->onUpdate('cascade')->onDelete('cascade');

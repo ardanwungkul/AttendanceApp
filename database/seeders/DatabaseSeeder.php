@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Divisi;
 use Illuminate\Support\Facades\Hash;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -33,6 +34,9 @@ class DatabaseSeeder extends Seeder
             'username' => 'karyawan',
             'role' => 'karyawan',
             'password' => Hash::make(12345678)
+        ]);
+        Divisi::create([
+            'nama_divisi' => 'Manajer'
         ]);
     }
 }

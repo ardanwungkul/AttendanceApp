@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Divisi extends Model
 {
     use HasFactory;
+
+    protected $table='divisis';
+
+    public function karyawan(){
+        return $this->hasMany(Karyawan::class);
+    }
 }
