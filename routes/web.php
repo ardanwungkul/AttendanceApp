@@ -24,7 +24,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::resource('admin/users', UserController::class);
+    Route::resource('admin/pengguna', UserController::class);
 });
 Route::middleware(['auth', 'role:karyawan'])->group(function () {});
 
