@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.dataTables_filter {
+    position: absolute;
+    top: -50px;
+    right: 0;
+}
+.dataTables_wrapper .dataTables_filter input {
+    border-radius: 8px;
+}

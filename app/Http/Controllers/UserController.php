@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = User::where('role', 'karyawan')->get();
+        $user = User::whereNot('role', 'superadmin')->get();
         return view('master.user.index', compact('user'));
     }
 }
