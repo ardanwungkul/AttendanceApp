@@ -18,10 +18,9 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex relative">
         @include('layouts.sidebar')
-
-        <main>
+        <main class="ml-[232px] w-full">
             {{ $slot }}
         </main>
     </div>
