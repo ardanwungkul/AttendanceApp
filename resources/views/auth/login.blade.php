@@ -8,11 +8,8 @@
         </div>
         <div class="w-1/2 flex flex-col justify-center">
             <div class="mb-3">
-                <a href="/" class="text-3xl font-bold text-mineral-green-300 mb-3">CV Budi<span
-                        class="text-mineral-green-600">
-                        Abadi</span>
-                </a>
-                <h3 class="text-gray-600 tracking-tight ">Selamat Datang di CV Budi Abadi !
+                <x-application-logo />
+                <h3 class="text-gray-600 tracking-tight mt-1">Selamat Datang di CV Budi Abadi !
                 </h3>
 
             </div>
