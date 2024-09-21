@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -23,8 +24,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::resource('admin/pengguna', UserController::class);
+    Route::resource('admin/divisi', DivisiController::class);
 });
 Route::middleware(['auth', 'role:karyawan'])->group(function () {});
 
