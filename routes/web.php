@@ -36,8 +36,8 @@ Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::resource('admin/pengaturan', PengaturanController::class);
 });
 Route::middleware(['auth', 'role:karyawan'])->group(function () {
-    Route::resource('admin/absensi', AbsensiController::class)->except(['show', 'store']);
-    Route::get('/absensi/{bulan}/{tahun}/{minggu}', [AbsensiController::class, 'show'])->name('absensi.show');
+    Route::resource('/absensi', AbsensiController::class)->except('show');
+    Route::get('/absensi/{tahun}/{minggu}', [AbsensiController::class, 'show'])->name('absensi.show');
 
     Route::post('absensi', [AbsensiController::class, 'store'])->name('absensi.store');
     Route::get('/', function () {
