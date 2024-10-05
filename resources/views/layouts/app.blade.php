@@ -84,8 +84,10 @@
         </div>
     @endif
     <div class="min-h-screen bg-gray-100 flex relative">
-        @include('layouts.sidebar')
-        <main class="pl-[254px] w-full p-6">
+        @if (Auth::user()->role !== 'karyawan')
+            @include('layouts.sidebar')
+        @endif
+        <main class=" {{ Auth::user()->role !== 'karyawan' ? 'pl-[254px]' : '' }} w-full p-6">
             <div class="bg-white rounded-lg shadow-md p-6">
                 @if (isset($header))
                     <div class="border-b pb-3 border-mineral-green-200">

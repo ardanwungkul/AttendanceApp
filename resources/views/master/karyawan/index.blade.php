@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">Daftar Karyawan</x-slot>
-    <div class="pb-4 relative pt-16">
+    <div class="pb-4 relative pt-5">
         <div class="pb-5">
             <a href="{{ route('karyawan.create') }}"
                 class="px-5 py-2 bg-mineral-green-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Tambah
