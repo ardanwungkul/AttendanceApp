@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\DivisiController;
 
@@ -32,7 +32,11 @@ Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::resource('admin/karyawan', KaryawanController::class);
     Route::resource('admin/divisi', DivisiController::class);
 });
-Route::middleware(['auth', 'role:karyawan'])->group(function () {});
+Route::middleware(['auth', 'role:karyawan'])->group(function () {
+    Route::resource('admin/absensi', AbsensiController::class)->except('show');
+    Route::get('/absensi/{bulan}/{tahun}/{minggu}', [AbsensiController::class, 'show'])->name('absensi.show');
+
+});
 
 
 Route::middleware('auth')->group(function () {

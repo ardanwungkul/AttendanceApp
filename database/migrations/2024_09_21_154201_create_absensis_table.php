@@ -16,7 +16,10 @@ return new class extends Migration
             $table->date('tanggal_kerja');
             $table->time('jam_masuk')->nullable();
             $table->time('jam_keluar')->nullable();
-            $table->time('keterangan')->nullable();
+            $table->text('keterangan')->nullable();
+            $table->enum('status', ['hadir','tidak hadir']);
+            $table->string('karyawan_nip',9);
+            $table->foreign('karyawan_nip')->references('nip')->on('karyawans')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

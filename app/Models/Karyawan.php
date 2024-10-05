@@ -28,4 +28,8 @@ class Karyawan extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function absensi(){
+        return $this->hasMany(Absensi::class);
+    }
 }
