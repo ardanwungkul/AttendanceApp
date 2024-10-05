@@ -6,6 +6,7 @@ use App\Http\Controllers\DivisiController;
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Models\Absensi;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,15 +20,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+
 
 Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    });
     Route::resource('admin/pengguna', UserController::class);
     Route::resource('admin/karyawan', KaryawanController::class);
     Route::resource('admin/divisi', DivisiController::class);
@@ -36,10 +36,14 @@ Route::middleware(['auth', 'role:karyawan'])->group(function () {
     Route::resource('admin/absensi', AbsensiController::class)->except('show');
     Route::get('/absensi/{bulan}/{tahun}/{minggu}', [AbsensiController::class, 'show'])->name('absensi.show');
 
+    Route::get('/', function () {
+        return view('welcome');
+    })->name('welcome');
 });
 
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
