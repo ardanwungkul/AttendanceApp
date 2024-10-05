@@ -22,7 +22,7 @@ class AbsensiController extends Controller
         $absensi = Absensi::where('karyawan_nip', $karyawan->nip)->get();
 
         // Mengelompokkan data absensi berdasarkan bulan, tahun, dan periode minggu
-        $groupedAbsensi = $absensi->groupBy(function($item) {
+        $groupedAbsensi = $absensi->groupBy(function ($item) {
             $tanggal = Carbon::parse($item->tanggal_kerja);
             $bulan = $tanggal->format('F'); // Nama bulan (misalnya: January)
             $tahun = $tanggal->format('Y'); // Tahun
@@ -48,7 +48,33 @@ class AbsensiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->tipe == 'check_in') {
+            $absensi = new Absensi();
+            $absensi->tanggal_kerja = Carbon::today();
+            $absensi->jam_masuk = Carbon::now()->format('H:i:s');
+            $absensi->karyawan_nip = $request->nip;
+            $absensi->status = $request->status;
+            $absensi->save();
+            return redirect()->back()->with(['success' => 'Berhasil Melakukan Absensi']);
+        } else {
+            $absensi = Absensi::find($request->absensi_id);
+            $absensi->jam_keluar = Carbon::now()->format('H:i:s');
+            if (Carbon::now()->greaterThan(Carbon::createFromFormat('H:i:s', '16:30:00'))) {
+                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', '09:00:00'))) {
+                    $absensi->keterangan = 'Datang Terlambat';
+                } else {
+                    $absensi->keterangan = 'Tepat Waktu';
+                }
+            } else {
+                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', '09:00:00'))) {
+                    $absensi->keterangan = 'Pulang Lebih Awal dan Terlambat';
+                } else {
+                    $absensi->keterangan = 'Pulang Lebih Awal';
+                }
+            }
+            $absensi->save();
+            return redirect()->back()->with(['success' => 'Berhasil Melakukan Absensi']);
+        }
     }
 
     /**

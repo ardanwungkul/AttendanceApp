@@ -3,10 +3,12 @@
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\DivisiController;
-
+use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Models\Absensi;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,17 +29,22 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
-    });
+    })->name('dashboard');
     Route::resource('admin/pengguna', UserController::class);
     Route::resource('admin/karyawan', KaryawanController::class);
     Route::resource('admin/divisi', DivisiController::class);
+    Route::resource('admin/pengaturan', PengaturanController::class);
 });
 Route::middleware(['auth', 'role:karyawan'])->group(function () {
-    Route::resource('admin/absensi', AbsensiController::class)->except('show');
+    Route::resource('admin/absensi', AbsensiController::class)->except(['show', 'store']);
     Route::get('/absensi/{bulan}/{tahun}/{minggu}', [AbsensiController::class, 'show'])->name('absensi.show');
 
+    Route::post('absensi', [AbsensiController::class, 'store'])->name('absensi.store');
     Route::get('/', function () {
-        return view('welcome');
+        $absensi = Absensi::where('karyawan_nip', Auth::user()->karyawan->nip)
+            ->where('tanggal_kerja', Carbon::today())
+            ->first();
+        return view('welcome', compact('absensi'));
     })->name('welcome');
 });
 
