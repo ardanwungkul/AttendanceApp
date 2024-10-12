@@ -30,6 +30,12 @@
                         <td>{{ $item->no_hp }}</td>
                         <td>{{ $item->tempat_lahir }}, {{ $item->tanggal_lahir }}</td>
                         <td class="flex justify-center items-end gap-3 text-xs">
+                            <a href="{{ route('karyawan.show', $item->nip) }}"
+                                class="bg-green-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
+                                <i class="fa-solid fa-eye"></i>
+                                <span> Buka
+                                </span>
+                            </a>
                             <a href="{{ route('karyawan.edit', $item->nip) }}"
                                 class="bg-blue-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
                                 <i class="fa-solid fa-pen"></i>
