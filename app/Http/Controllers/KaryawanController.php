@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Divisi;
+use App\Models\Absensi;
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -71,7 +73,38 @@ class KaryawanController extends Controller
      */
     public function show(Karyawan $karyawan)
     {
-        //
+            // Mengambil semua absensi berdasarkan karyawan_nip
+            $absensi = Absensi::where('karyawan_nip', $karyawan->nip)->get();
+
+            // Mengelompokkan data absensi berdasarkan tahun dan periode minggu kerja
+            $groupedAbsensi = $absensi->groupBy(function ($item) {
+                $tanggal = Carbon::parse($item->tanggal_kerja);
+                $tahun = $tanggal->format('Y'); // Tahun
+                // Menghitung minggu kerja
+                $firstDayOfYear = Carbon::createFromFormat('Y-m-d', "$tahun-01-01");
+                $firstMondayOfYear = $firstDayOfYear->copy()->startOfWeek(); // Mendapatkan hari Senin pertama tahun
+                $weekOfYear = $tanggal->diffInWeeks($firstMondayOfYear) + 1; // Menambahkan 1 agar mulai dari minggu 1
+
+                return $tahun . '-Minggu-' . $weekOfYear; // Format key: "2024-Minggu-1"
+            });
+
+            // Menyiapkan rentang tanggal untuk setiap minggu
+            $rentangTanggal = [];
+            foreach ($groupedAbsensi as $key => $items) {
+                // Mengambil tahun dan minggu dari key
+                list($tahun, $minggu) = explode('-Minggu-', $key);
+                $weekNumber = (int)$minggu;
+
+                // Menghitung tanggal awal dan akhir minggu
+                $firstDayOfYear = Carbon::createFromFormat('Y-m-d', "$tahun-01-01");
+                $firstMondayOfYear = $firstDayOfYear->copy()->startOfWeek(); // Mendapatkan hari Senin pertama tahun
+                $startDate = $firstMondayOfYear->copy()->addWeeks($weekNumber - 1); // Tanggal mulai minggu
+                $endDate = $startDate->copy()->addDays(4); // Tanggal akhir minggu
+
+                // Menyimpan rentang tanggal
+                $rentangTanggal[$key] = $startDate->format('d F') . ' s/d ' . $endDate->format('d F Y');
+            }
+        return view('master.karyawan.show', compact('karyawan', 'groupedAbsensi', 'rentangTanggal'));
     }
 
     /**

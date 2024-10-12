@@ -100,13 +100,15 @@ class AbsensiController extends Controller
         }
     }
 
-    public function show($tahun, $minggu)
+    public function show($nip, $tahun, $minggu)
     {
         // Mendapatkan ID user yang sedang login
-        $idUser = Auth::user()->id;
-
-        // Mencari karyawan berdasarkan user_id
-        $karyawan = Karyawan::where('user_id', $idUser)->first();
+        if(Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin'){
+            $karyawan = Karyawan::where('nip', $nip)->first();
+        }else{
+            $idUser = Auth::user()->id;
+            $karyawan = Karyawan::where('user_id', $idUser)->first();
+        }
 
         // Menghitung tanggal awal dari minggu yang diminta
         // Mendapatkan hari Senin pertama dari tahun yang diberikan
