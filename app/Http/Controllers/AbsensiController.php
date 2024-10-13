@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Absensi;
 use App\Models\Karyawan;
+use App\Models\Pengaturan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Iroid\LaravelHaversine\Haversine;
 
 class AbsensiController extends Controller
 {
@@ -69,27 +71,74 @@ class AbsensiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    private function haversine($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371000;
+
+        $lat1 = deg2rad($lat1);
+        $lon1 = deg2rad($lon1);
+        $lat2 = deg2rad($lat2);
+        $lon2 = deg2rad($lon2);
+
+        $latDelta = $lat2 - $lat1;
+        $lonDelta = $lon2 - $lon1;
+
+        $a = sin($latDelta / 2) * sin($latDelta / 2) +
+            cos($lat1) * cos($lat2) *
+            sin($lonDelta / 2) * sin($lonDelta / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+        return $earthRadius * $c;
+    }
     public function store(Request $request)
     {
+        $pengaturan = Pengaturan::first();
+
         if ($request->tipe == 'check_in') {
             $absensi = new Absensi();
             $absensi->tanggal_kerja = Carbon::today();
-            $absensi->jam_masuk = Carbon::now()->format('H:i:s');
             $absensi->karyawan_nip = $request->nip;
             $absensi->status = $request->status;
+            if ($request->status == 'tidak hadir') {
+                $absensi->keterangan = $request->keterangan;
+                if ($request->hasFile('lampiran')) {
+                    $file = $request->file('lampiran');
+                    $fileName = time() . '_' . Auth::user()->id . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('storage/lampiran'), $fileName);
+                    $absensi->lampiran = $fileName;
+                }
+            } else {
+                $latitudeUser = floatval($request->latitude);
+                $longitudeUser = floatval($request->longitude);
+                $latitudePengaturan = floatval($pengaturan->latitude);
+                $longitudePengaturan = floatval($pengaturan->longitude);
+                $distance = $this->haversine(
+                    $latitudePengaturan,
+                    $longitudePengaturan,
+                    $latitudeUser,
+                    $longitudeUser
+                );
+                if ($distance <= $pengaturan->radius) {
+                    $absensi->jam_masuk = Carbon::now()->format('H:i:s');
+                } else {
+                    return redirect()->back()->withErrors('Anda berada di luar area absensi.');
+                }
+            }
             $absensi->save();
             return redirect()->back()->with(['success' => 'Berhasil Melakukan Absensi']);
         } else {
             $absensi = Absensi::find($request->absensi_id);
             $absensi->jam_keluar = Carbon::now()->format('H:i:s');
-            if (Carbon::now()->greaterThan(Carbon::createFromFormat('H:i:s', '16:30:00'))) {
-                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', '09:00:00'))) {
+            if (Carbon::now()->greaterThan(Carbon::createFromFormat('H:i:s', $pengaturan->jam_keluar))) {
+                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', $pengaturan->jam_masuk))) {
                     $absensi->keterangan = 'Datang Terlambat';
                 } else {
                     $absensi->keterangan = 'Tepat Waktu';
                 }
             } else {
-                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', '09:00:00'))) {
+                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', $pengaturan->jam_masuk))) {
                     $absensi->keterangan = 'Pulang Lebih Awal dan Terlambat';
                 } else {
                     $absensi->keterangan = 'Pulang Lebih Awal';
@@ -103,9 +152,9 @@ class AbsensiController extends Controller
     public function show($nip, $tahun, $minggu)
     {
         // Mendapatkan ID user yang sedang login
-        if(Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin'){
+        if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin') {
             $karyawan = Karyawan::where('nip', $nip)->first();
-        }else{
+        } else {
             $idUser = Auth::user()->id;
             $karyawan = Karyawan::where('user_id', $idUser)->first();
         }

@@ -7,6 +7,7 @@ use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Models\Absensi;
+use App\Models\Pengaturan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -40,10 +41,11 @@ Route::middleware(['auth', 'role:karyawan'])->group(function () {
 
     Route::post('absensi', [AbsensiController::class, 'store'])->name('absensi.store');
     Route::get('/', function () {
+        $pengaturan = Pengaturan::first();
         $absensi = Absensi::where('karyawan_nip', Auth::user()->karyawan->nip)
             ->where('tanggal_kerja', Carbon::today())
             ->first();
-        return view('welcome', compact('absensi'));
+        return view('welcome', compact('absensi', 'pengaturan'));
     })->name('welcome');
 });
 
