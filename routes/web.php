@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\DivisiController;
+use App\Http\Controllers\GajiController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::resource('admin/karyawan', KaryawanController::class);
     Route::resource('admin/divisi', DivisiController::class);
     Route::resource('admin/pengaturan', PengaturanController::class);
+    Route::resource('admin/gaji', GajiController::class)->except('show');
 });
 Route::middleware(['auth', 'role:karyawan'])->group(function () {
     Route::resource('/absensi', AbsensiController::class)->except('show');
@@ -54,6 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/absensi/{nip}/{tahun}/{minggu}', [AbsensiController::class, 'show'])->name('absensi.show');
+    Route::get('/gaji/{tahun}/{minggu}/{gaji}', [GajiController::class, 'show'])->name('gaji.show');
 
 });
 

@@ -8,6 +8,7 @@
                     <td class="!text-center">Tahun</td>
                     <td class="!text-center">Minggu</td>
                     <td class="!text-center">Rentang Tanggal</td>
+                    <td class="!text-center">Status Gaji</td>
                     <td class="!text-center !w-48">Aksi</td>
                 </tr>
             </thead>
@@ -22,14 +23,18 @@
                         <td class="!text-center">{{ $tahun }}</td>
                         <td class="!text-center">Minggu ke-{{ $minggu }}</td>
                         <td class="!text-center">{{ $rentangTanggal[$key] }}</td>
+                        <td
+                            class="!text-center {{ $groupedAbsensi[$key]->statusGaji ? 'text-green-500' : 'text-red-500' }}">
+                            {{ $groupedAbsensi[$key]->statusGaji ? 'Sudah dibayar' : 'Belum dibayar' }}</td>
                         <td class="!text-center">
-                            <a href="{{ route('absensi.show', ['tahun' => $tahun, 'minggu' => $minggu]) }}"
+                            <a href="{{ route('absensi.show', ['nip' => $groupedAbsensi[$key][0]->karyawan_nip, 'tahun' => $tahun, 'minggu' => $minggu]) }}"
                                 class="text-blue-500 hover:underline">Lihat Detail</a>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+
     </div>
 </x-app-layout>
 
@@ -45,5 +50,5 @@
                 'searchPlaceholder': 'Search for items'
             },
         });
-    })
+    });
 </script>
