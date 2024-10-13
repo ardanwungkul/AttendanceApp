@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Absensi;
+use App\Models\Gaji;
 use App\Models\Karyawan;
 use App\Models\Pengaturan;
 use Illuminate\Http\Request;
@@ -50,6 +51,12 @@ class AbsensiController extends Controller
 
             // Menyimpan rentang tanggal
             $rentangTanggal[$key] = $startDate->format('d F') . ' s/d ' . $endDate->format('d F Y');
+            $gaji = Gaji::where('karyawan_nip', $karyawan->nip)
+            ->where('periode_awal',  $startDate->format('Y-m-d'))
+            ->where('periode_akhir',  $endDate->format('Y-m-d'))
+            ->get(); // Mengembalikan true jika gaji ada dalam rentang tanggal
+            // Menambahkan statusGaji pada groupedAbsensi
+            $groupedAbsensi[$key]->statusGaji = $gaji ? true : false;
         }
 
         // Mengembalikan bulan, tahun, periode minggu, dan rentang tanggal
@@ -157,6 +164,7 @@ class AbsensiController extends Controller
         } else {
             $idUser = Auth::user()->id;
             $karyawan = Karyawan::where('user_id', $idUser)->first();
+            $nip = $karyawan->nip;
         }
 
         // Menghitung tanggal awal dari minggu yang diminta
@@ -172,9 +180,11 @@ class AbsensiController extends Controller
         $absensi = Absensi::where('karyawan_nip', $karyawan->nip)
             ->whereBetween('tanggal_kerja', [$startDate, $endDate])
             ->get();
-
-        // Mengembalikan view dengan data absensi yang diambil
-        return view('master.absensi.show', compact('absensi', 'tahun', 'minggu'));
+        $gaji = Gaji::where('karyawan_nip', $karyawan->nip)
+        ->where('periode_awal', $startDate->format('Y-m-d'))
+        ->where('periode_akhir', $endDate->format('Y-m-d'))->first();
+        // Mengembsalikan view dengan data absensi yang diambil
+        return view('master.absensi.show', compact('absensi', 'tahun', 'minggu','startDate','endDate', 'nip','gaji'));
     }
 
 

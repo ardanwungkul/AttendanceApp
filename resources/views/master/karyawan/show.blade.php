@@ -35,6 +35,7 @@
                         <td class="!text-center">Tahun</td>
                         <td class="!text-center">Minggu</td>
                         <td class="!text-center">Rentang Tanggal</td>
+                        <td class="!text-center">Status Gaji</td>
                         <td class="!text-center !w-48">Aksi</td>
                     </tr>
                 </thead>
@@ -49,6 +50,9 @@
                             <td class="!text-center">{{ $tahun }}</td>
                             <td class="!text-center">Minggu ke-{{ $minggu }}</td>
                             <td class="!text-center">{{ $rentangTanggal[$key] }}</td>
+                            <td
+                                class="!text-center {{ $groupedAbsensi[$key]->statusGaji ? 'text-green-500' : 'text-red-500' }}">
+                                {{ $groupedAbsensi[$key]->statusGaji ? 'Sudah dibayar' : 'Belum dibayar' }}</td>
                             <td class="!flex !justify-center">
                                 <a href="{{ route('absensi.show', ['nip' => $karyawan->nip, 'tahun' => $tahun, 'minggu' => $minggu]) }}"
                                     class="max-w-fit bg-green-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90 text-center">
