@@ -109,7 +109,7 @@ class KaryawanController extends Controller
         $gaji = Gaji::where('karyawan_nip', $karyawan->nip)
                     ->where('periode_awal',  $startDate->format('Y-m-d'))
                     ->where('periode_akhir',  $endDate->format('Y-m-d'))
-                    ->get(); // Mengembalikan true jika gaji ada dalam rentang tanggal
+                    ->exists(); // Mengembalikan true jika gaji ada dalam rentang tanggal
         // Menambahkan statusGaji pada groupedAbsensi
         $groupedAbsensi[$key]->statusGaji = $gaji ? true : false;
     }

@@ -66,37 +66,37 @@ class DatabaseSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
 
-        // DB::table('absensis')->insert([
-        //     [
-        //         'tanggal_kerja' => Carbon::today(),
-        //         'jam_masuk' => Carbon::createFromTime(8, 30, 0),
-        //         'jam_keluar' => Carbon::createFromTime(17, 0, 0),
-        //         'keterangan' => 'Tepat waktu',
-        //         'status' => 'hadir',
-        //         'karyawan_nip' => '123',
-        //         'created_at' => Carbon::now(),
-        //         'updated_at' => Carbon::now(),
-        //     ],
-        //     [
-        //         'tanggal_kerja' => Carbon::yesterday(),
-        //         'jam_masuk' => Carbon::createFromTime(9, 0, 0),
-        //         'jam_keluar' => Carbon::createFromTime(17, 30, 0),
-        //         'keterangan' => 'Terlambat masuk',
-        //         'status' => 'hadir',
-        //         'karyawan_nip' => '123',
-        //         'created_at' => Carbon::now(),
-        //         'updated_at' => Carbon::now(),
-        //     ],
-        //     [
-        //         'tanggal_kerja' => Carbon::now()->subDays(2),
-        //         'jam_masuk' => null,
-        //         'jam_keluar' => null,
-        //         'keterangan' => 'Sakit',
-        //         'status' => 'tidak hadir',
-        //         'karyawan_nip' => '123',
-        //         'created_at' => Carbon::now(),
-        //         'updated_at' => Carbon::now(),
-        //     ],
-        // ]);
+        DB::table('absensis')->insert([
+            [
+                'tanggal_kerja' => Carbon::now()->subDays(3),
+                'jam_masuk' => Carbon::createFromTime(8, 30, 0),
+                'jam_keluar' => Carbon::createFromTime(17, 0, 0),
+                'keterangan' => 'Tepat waktu',
+                'status' => 'hadir',
+                'karyawan_nip' => '123',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'tanggal_kerja' =>  Carbon::now()->subDays(3),
+                'jam_masuk' => Carbon::createFromTime(9, 0, 0),
+                'jam_keluar' => Carbon::createFromTime(17, 30, 0),
+                'keterangan' => 'Terlambat masuk',
+                'status' => 'hadir',
+                'karyawan_nip' => '123',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'tanggal_kerja' => Carbon::now()->subDays(2),
+                'jam_masuk' => null,
+                'jam_keluar' => null,
+                'keterangan' => 'Sakit',
+                'status' => 'tidak hadir',
+                'karyawan_nip' => '123',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+        ]);
     }
 }
