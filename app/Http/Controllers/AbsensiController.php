@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Absensi;
 use App\Models\Karyawan;
+use App\Models\Pengaturan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -71,25 +72,36 @@ class AbsensiController extends Controller
      */
     public function store(Request $request)
     {
+        $pengaturan = Pengaturan::first();
         if ($request->tipe == 'check_in') {
             $absensi = new Absensi();
             $absensi->tanggal_kerja = Carbon::today();
-            $absensi->jam_masuk = Carbon::now()->format('H:i:s');
             $absensi->karyawan_nip = $request->nip;
             $absensi->status = $request->status;
+            if ($request->status == 'tidak hadir') {
+                $absensi->keterangan = $request->keterangan;
+                if ($request->hasFile('lampiran')) {
+                    $file = $request->file('lampiran');
+                    $fileName = time() . '_' . Auth::user()->id . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('storage/lampiran'), $fileName);
+                    $absensi->lampiran = $fileName;
+                }
+            } else {
+                $absensi->jam_masuk = Carbon::now()->format('H:i:s');
+            }
             $absensi->save();
             return redirect()->back()->with(['success' => 'Berhasil Melakukan Absensi']);
         } else {
             $absensi = Absensi::find($request->absensi_id);
             $absensi->jam_keluar = Carbon::now()->format('H:i:s');
-            if (Carbon::now()->greaterThan(Carbon::createFromFormat('H:i:s', '16:30:00'))) {
-                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', '09:00:00'))) {
+            if (Carbon::now()->greaterThan(Carbon::createFromFormat('H:i:s', $pengaturan->jam_keluar))) {
+                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', $pengaturan->jam_masuk))) {
                     $absensi->keterangan = 'Datang Terlambat';
                 } else {
                     $absensi->keterangan = 'Tepat Waktu';
                 }
             } else {
-                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', '09:00:00'))) {
+                if (Carbon::parse($absensi->jam_masuk)->greaterThan(Carbon::createFromFormat('H:i:s', $pengaturan->jam_masuk))) {
                     $absensi->keterangan = 'Pulang Lebih Awal dan Terlambat';
                 } else {
                     $absensi->keterangan = 'Pulang Lebih Awal';

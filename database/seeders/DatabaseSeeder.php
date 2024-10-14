@@ -8,6 +8,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Divisi;
+use App\Models\Pengaturan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -40,6 +41,16 @@ class DatabaseSeeder extends Seeder
         ]);
         Divisi::create([
             'nama_divisi' => 'Manajer'
+        ]);
+
+        Pengaturan::create([
+            'jam_masuk' => '09:00:00',
+            'jam_keluar' => '17:30:00',
+            'batas_waktu' => '12:00:00',
+            'upah_per_hari' => '3000000',
+            'latitude' => '-7.0501997112200705',
+            'longitude' => '107.75985479634787',
+            'radius' => '3000000',
         ]);
 
         DB::table('karyawans')->insert([

@@ -33,6 +33,9 @@ class PengaturanController extends Controller
         $pengaturan->jam_masuk = $request->jam_masuk;
         $pengaturan->jam_keluar = $request->jam_keluar;
         $pengaturan->batas_waktu = $request->batas_waktu;
+        $pengaturan->latitude = $request->latitude;
+        $pengaturan->longitude = $request->longitude;
+        $pengaturan->radius = $request->radius;
         $pengaturan->save();
         return redirect()->back()->with(['success' => 'Berhasil Menyimpan Pengaturan']);
     }
