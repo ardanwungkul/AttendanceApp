@@ -8,6 +8,7 @@ use App\Models\Karyawan;
 use App\Models\Pengaturan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Iroid\LaravelHaversine\Haversine;
 
 class AbsensiController extends Controller
 {
@@ -70,9 +71,42 @@ class AbsensiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    private function haversine($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371000; // dalam meter
+        $lat1 = deg2rad($lat1);
+        $lon1 = deg2rad($lon1);
+        $lat2 = deg2rad($lat2);
+        $lon2 = deg2rad($lon2);
+
+        $latDelta = $lat2 - $lat1;
+        $lonDelta = $lon2 - $lon1;
+
+        $a = sin($latDelta / 2) * sin($latDelta / 2) +
+            cos($lat1) * cos($lat2) *
+            sin($lonDelta / 2) * sin($lonDelta / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+        $distance = $earthRadius * $c;
+
+        return $distance;
+    }
     public function store(Request $request)
     {
         $pengaturan = Pengaturan::first();
+        $latitudeUser = floatval($request->latitude);
+        $longitudeUser = floatval($request->longitude);
+        $latitudePengaturan = floatval($pengaturan->latitude);
+        $longitudePengaturan = floatval($pengaturan->longitude);
+        $distance = $this->haversine(
+            $latitudePengaturan,
+            $longitudePengaturan,
+            $latitudeUser,
+            $longitudeUser,
+        );
+        dd($latitudeUser, $longitudeUser, $latitudePengaturan, $longitudePengaturan, $distance);
         if ($request->tipe == 'check_in') {
             $absensi = new Absensi();
             $absensi->tanggal_kerja = Carbon::today();
@@ -115,9 +149,9 @@ class AbsensiController extends Controller
     public function show($nip, $tahun, $minggu)
     {
         // Mendapatkan ID user yang sedang login
-        if(Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin'){
+        if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin') {
             $karyawan = Karyawan::where('nip', $nip)->first();
-        }else{
+        } else {
             $idUser = Auth::user()->id;
             $karyawan = Karyawan::where('user_id', $idUser)->first();
         }

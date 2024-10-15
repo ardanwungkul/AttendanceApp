@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d6e9f6356655997e5f9f51432703369",
+    "content-hash": "55634febc1d06169e4add4bd072a80b3",
     "packages": [
         {
             "name": "brick/math",
@@ -1096,6 +1096,47 @@
                 "source": "https://github.com/haruncpi/laravel-id-generator/tree/v1.1.0"
             },
             "time": "2021-10-01T06:16:03+00:00"
+        },
+        {
+            "name": "iroid/laravel-haversine",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/salman1802/laravel-haversine.git",
+                "reference": "0321c630695f16724112c315025f992c0a1c9cc5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/salman1802/laravel-haversine/zipball/0321c630695f16724112c315025f992c0a1c9cc5",
+                "reference": "0321c630695f16724112c315025f992c0a1c9cc5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Iroid\\LaravelHaversine\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Salman Ansari",
+                    "email": "salman.ansari.1253218@email.com"
+                }
+            ],
+            "description": "Laravel package for calculating distances using the Haversine formula",
+            "support": {
+                "issues": "https://github.com/salman1802/laravel-haversine/issues",
+                "source": "https://github.com/salman1802/laravel-haversine/tree/main"
+            },
+            "time": "2024-02-23T05:28:23+00:00"
         },
         {
             "name": "laravel/breeze",
@@ -8227,12 +8268,14 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "iroid/laravel-haversine": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

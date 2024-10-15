@@ -28,11 +28,13 @@
             </div>
             @if (!$absensi)
                 <div class="flex flex-col items-center gap-3" id="check-in" style="display: none;">
-                    <form action="{{ route('absensi.store') }}" method="post" class="w-full max-w-40">
+                    <form action="{{ route('absensi.store') }}" method="post" class="w-full max-w-40" id="formAbsensi">
                         @csrf
                         @method('POST')
                         <input type="hidden" name="nip" value="{{ Auth::user()->karyawan->nip }}">
                         <input type="hidden" name="status" value="hadir">
+                        <input type="hidden" name="longitude" id="latitude">
+                        <input type="hidden" name="latitude" id="longitude">
                         <input type="hidden" name="tipe" value="check_in">
                         <button type="submit"
                             class="text-center border rounded-lg w-full py-1 px-3 bg-green-500 text-white shadow-lg hover:bg-opacity-80 text-sm"
@@ -132,27 +134,10 @@
     function showPosition(position) {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
-        console.log(latitude, longitude);
 
-
-        // Kirim lokasi ke form menggunakan input hidden
-        // let form = document.getElementById('absensiForm');
-        // let latInput = document.createElement('input');
-        // let lonInput = document.createElement('input');
-
-        // latInput.type = 'hidden';
-        // latInput.name = 'latitude';
-        // latInput.value = latitude;
-
-        // lonInput.type = 'hidden';
-        // lonInput.name = 'longitude';
-        // lonInput.value = longitude;
-
-        // form.appendChild(latInput);
-        // form.appendChild(lonInput);
-
-        // Setelah lokasi ditambahkan ke form, submit form
-        // form.submit();
+        document.getElementById('latitude').value = latitude;
+        document.getElementById('longitude').value = longitude;
+        document.getElementById('formAbsensi').submit();
     }
 
     function showError(error) {

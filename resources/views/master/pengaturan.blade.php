@@ -24,17 +24,19 @@
             </fieldset>
             <fieldset class="space-y-4 border rounded-lg p-4">
                 <legend class="font-semibold">Lokasi Absensi</legend>
-                <div id="map" class="h-40 w-full"></div>
-                <input type="hidden" name="latitude" id="latitude" value="{{ $pengaturan->latitude }}">
-                <input type="hidden" name="longitude" id="longitude"value="{{ $pengaturan->longitude }}">
-                <div class="!mt-0">
+                <div id="map" class="h-80 w-full rounded-lg !mt-0">
+                    <button type="button" id="locateButton"
+                        class="w-8 h-8 rounded absolute top-2 border bg-white border-gray-700 right-2 z-[500] flex items-center justify-center">
+                        <i class="fa-solid fa-crosshairs"></i>
+                    </button>
+                </div>
+                <div class="">
                     <x-input-label for="radius" :value="__('Radius (Meter)')" />
                     <x-text-input id="radius" class="block mt-1 w-full text-sm" type="number" name="radius"
                         required step="any" autofocus :value="$pengaturan->radius" />
                 </div>
-                <button type="button" id="locateButton" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
-                    Pindah ke Lokasi Sekarang
-                </button>
+                <input type="hidden" name="latitude" id="latitude" value="{{ $pengaturan->latitude }}">
+                <input type="hidden" name="longitude" id="longitude"value="{{ $pengaturan->longitude }}">
             </fieldset>
             <div class="flex justify-end">
                 <button type="submit"
@@ -89,6 +91,7 @@
         circle.setRadius(radiusInput.value);
     });
     document.getElementById('locateButton').addEventListener('click', () => {
+        event.stopPropagation();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const lat = position.coords.latitude;
