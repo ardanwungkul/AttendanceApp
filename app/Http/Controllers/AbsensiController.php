@@ -74,7 +74,8 @@ class AbsensiController extends Controller
 
     private function haversine($lat1, $lon1, $lat2, $lon2)
     {
-        $earthRadius = 6371000; // dalam meter
+        $earthRadius = 6371000;
+
         $lat1 = deg2rad($lat1);
         $lon1 = deg2rad($lon1);
         $lat2 = deg2rad($lat2);
@@ -89,24 +90,12 @@ class AbsensiController extends Controller
 
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
-        $distance = $earthRadius * $c;
-
-        return $distance;
+        return $earthRadius * $c;
     }
     public function store(Request $request)
     {
         $pengaturan = Pengaturan::first();
-        $latitudeUser = floatval($request->latitude);
-        $longitudeUser = floatval($request->longitude);
-        $latitudePengaturan = floatval($pengaturan->latitude);
-        $longitudePengaturan = floatval($pengaturan->longitude);
-        $distance = $this->haversine(
-            $latitudePengaturan,
-            $longitudePengaturan,
-            $latitudeUser,
-            $longitudeUser,
-        );
-        dd($latitudeUser, $longitudeUser, $latitudePengaturan, $longitudePengaturan, $distance);
+
         if ($request->tipe == 'check_in') {
             $absensi = new Absensi();
             $absensi->tanggal_kerja = Carbon::today();
@@ -121,7 +110,21 @@ class AbsensiController extends Controller
                     $absensi->lampiran = $fileName;
                 }
             } else {
-                $absensi->jam_masuk = Carbon::now()->format('H:i:s');
+                $latitudeUser = floatval($request->latitude);
+                $longitudeUser = floatval($request->longitude);
+                $latitudePengaturan = floatval($pengaturan->latitude);
+                $longitudePengaturan = floatval($pengaturan->longitude);
+                $distance = $this->haversine(
+                    $latitudePengaturan,
+                    $longitudePengaturan,
+                    $latitudeUser,
+                    $longitudeUser
+                );
+                if ($distance <= $pengaturan->radius) {
+                    $absensi->jam_masuk = Carbon::now()->format('H:i:s');
+                } else {
+                    return redirect()->back()->withErrors('Anda berada di luar area absensi.');
+                }
             }
             $absensi->save();
             return redirect()->back()->with(['success' => 'Berhasil Melakukan Absensi']);

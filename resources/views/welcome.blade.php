@@ -33,8 +33,8 @@
                         @method('POST')
                         <input type="hidden" name="nip" value="{{ Auth::user()->karyawan->nip }}">
                         <input type="hidden" name="status" value="hadir">
-                        <input type="hidden" name="longitude" id="latitude">
-                        <input type="hidden" name="latitude" id="longitude">
+                        <input type="hidden" name="latitude" id="latitude">
+                        <input type="hidden" name="longitude" id="longitude">
                         <input type="hidden" name="tipe" value="check_in">
                         <button type="submit"
                             class="text-center border rounded-lg w-full py-1 px-3 bg-green-500 text-white shadow-lg hover:bg-opacity-80 text-sm"
@@ -48,7 +48,7 @@
 
                 </div>
             @else
-                @if (!$absensi->jam_keluar && $absensi->status == 'hadir    ')
+                @if (!$absensi->jam_keluar && $absensi->status == 'hadir')
                     <div class="flex flex-col items-center gap-3" id="check-out">
                         <form action="{{ route('absensi.store') }}" method="post" class="w-full max-w-40">
                             @csrf
