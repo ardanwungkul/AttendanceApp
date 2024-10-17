@@ -15,7 +15,17 @@ class GajiController extends Controller
      */
     public function index()
     {
-        //
+        $gaji = Gaji::select('periode_awal', 'periode_akhir')
+        ->distinct()
+        ->get();
+        return view('master.gaji.index', compact('gaji'));
+    }
+    public function list($awal, $akhir)
+    {
+        $gaji = Gaji::where('periode_awal', $awal)
+        ->where('periode_akhir', $akhir)
+        ->get();
+        return view('master.gaji.list', compact('gaji'));
     }
 
     /**
