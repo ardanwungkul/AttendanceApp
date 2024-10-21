@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Absensi;
+use App\Models\Gaji;
 use App\Models\Karyawan;
 use App\Models\Pengaturan;
 use Illuminate\Http\Request;
@@ -20,37 +21,46 @@ class AbsensiController extends Controller
         $idUser = Auth::user()->id;
         $karyawan = Karyawan::where('user_id', $idUser)->first();
 
-        // Mengambil semua absensi berdasarkan karyawan_nip
-        $absensi = Absensi::where('karyawan_nip', $karyawan->nip)->get();
+         // Mengambil semua absensi berdasarkan karyawan_nip
+    $absensi = Absensi::where('karyawan_nip', $karyawan->nip)->get();
 
-        // Mengelompokkan data absensi berdasarkan tahun dan periode minggu kerja
-        $groupedAbsensi = $absensi->groupBy(function ($item) {
-            $tanggal = Carbon::parse($item->tanggal_kerja);
-            $tahun = $tanggal->format('Y'); // Tahun
-            // Menghitung minggu kerja
-            $firstDayOfYear = Carbon::createFromFormat('Y-m-d', "$tahun-01-01");
-            $firstMondayOfYear = $firstDayOfYear->copy()->startOfWeek(); // Mendapatkan hari Senin pertama tahun
-            $weekOfYear = $tanggal->diffInWeeks($firstMondayOfYear) + 1; // Menambahkan 1 agar mulai dari minggu 1
+    // Mengelompokkan data absensi berdasarkan tahun dan periode minggu kerja
+    $groupedAbsensi = $absensi->groupBy(function ($item) {
+        $tanggal = Carbon::parse($item->tanggal_kerja);
+        $tahun = $tanggal->format('Y'); // Tahun
+        // Menghitung minggu kerja
+        $firstDayOfYear = Carbon::createFromFormat('Y-m-d', "$tahun-01-01");
+        $firstMondayOfYear = $firstDayOfYear->copy()->startOfWeek(); // Mendapatkan hari Senin pertama tahun
+        $weekOfYear = $tanggal->diffInWeeks($firstMondayOfYear) + 1; // Menambahkan 1 agar mulai dari minggu 1
 
-            return $tahun . '-Minggu-' . $weekOfYear; // Format key: "2024-Minggu-1"
-        });
+        return $tahun . '-Minggu-' . $weekOfYear; // Format key: "2024-Minggu-1"
+    });
 
-        // Menyiapkan rentang tanggal untuk setiap minggu
-        $rentangTanggal = [];
-        foreach ($groupedAbsensi as $key => $items) {
-            // Mengambil tahun dan minggu dari key
-            list($tahun, $minggu) = explode('-Minggu-', $key);
-            $weekNumber = (int)$minggu;
+    // Menyiapkan rentang tanggal untuk setiap minggu dan menambahkan statusGaji
+    $rentangTanggal = [];
+    foreach ($groupedAbsensi as $key => $items) {
+        // Mengambil tahun dan minggu dari key
+        list($tahun, $minggu) = explode('-Minggu-', $key);
+        $weekNumber = (int)$minggu;
 
-            // Menghitung tanggal awal dan akhir minggu
-            $firstDayOfYear = Carbon::createFromFormat('Y-m-d', "$tahun-01-01");
-            $firstMondayOfYear = $firstDayOfYear->copy()->startOfWeek(); // Mendapatkan hari Senin pertama tahun
-            $startDate = $firstMondayOfYear->copy()->addWeeks($weekNumber - 1); // Tanggal mulai minggu
-            $endDate = $startDate->copy()->addDays(4); // Tanggal akhir minggu
+        // Menghitung tanggal awal dan akhir minggu
+        $firstDayOfYear = Carbon::createFromFormat('Y-m-d', "$tahun-01-01");
+        $firstMondayOfYear = $firstDayOfYear->copy()->startOfWeek(); // Mendapatkan hari Senin pertama tahun
+        $startDate = $firstMondayOfYear->copy()->addWeeks($weekNumber - 1); // Tanggal mulai minggu
+        $endDate = $startDate->copy()->addDays(4); // Tanggal akhir minggu
 
-            // Menyimpan rentang tanggal
-            $rentangTanggal[$key] = $startDate->format('d F') . ' s/d ' . $endDate->format('d F Y');
-        }
+        // Menyimpan rentang tanggal
+        $rentangTanggal[$key] = $startDate->format('d F') . ' s/d ' . $endDate->format('d F Y');
+
+        // Mengecek apakah gaji sudah dibayarkan dalam rentang tanggal ini
+        $gaji = Gaji::where('karyawan_nip', $karyawan->nip)
+                    ->where('periode_awal',  $startDate->format('Y-m-d'))
+                    ->where('periode_akhir',  $endDate->format('Y-m-d'))
+                    ->exists(); // Mengembalikan true jika gaji ada dalam rentang tanggal
+        // Menambahkan statusGaji pada groupedAbsensi
+        $groupedAbsensi[$key]->statusGaji = $gaji ? true : false;
+    }
+
 
         // Mengembalikan bulan, tahun, periode minggu, dan rentang tanggal
         return view('master.absensi.index', compact('groupedAbsensi', 'rentangTanggal'));
@@ -157,6 +167,7 @@ class AbsensiController extends Controller
         } else {
             $idUser = Auth::user()->id;
             $karyawan = Karyawan::where('user_id', $idUser)->first();
+            $nip = $karyawan->nip;
         }
 
         // Menghitung tanggal awal dari minggu yang diminta
@@ -172,9 +183,12 @@ class AbsensiController extends Controller
         $absensi = Absensi::where('karyawan_nip', $karyawan->nip)
             ->whereBetween('tanggal_kerja', [$startDate, $endDate])
             ->get();
-
-        // Mengembalikan view dengan data absensi yang diambil
-        return view('master.absensi.show', compact('absensi', 'tahun', 'minggu'));
+        $gaji = Gaji::where('karyawan_nip', $karyawan->nip)
+        ->where('periode_awal', $startDate->format('Y-m-d'))
+        ->where('periode_akhir', $endDate->subDays(2)->format('Y-m-d'))
+        ->first();
+        // Mengembsalikan view dengan data absensi yang diambil
+        return view('master.absensi.show', compact('absensi', 'tahun', 'minggu','startDate','endDate', 'nip','gaji'));
     }
 
 
