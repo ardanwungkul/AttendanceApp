@@ -28,11 +28,12 @@
                 <div class="p-4 md:p-5 space-y-4">
                     <div class="space-y-1">
                         <label for="keterangan">Keterangan</label>
-                        <textarea name="keterangan" id="keterangan" rows="4" class="w-full rounded-lg"></textarea>
+                        <textarea name="keterangan" id="keterangan" rows="4" class="w-full rounded-lg" required></textarea>
                     </div>
                     <div class="space-y-1">
                         <label for="lampiran">Lampiran</label>
-                        <input type="file" name="lampiran" id="lampiran" class="w-full rounded-lg border text-sm" />
+                        <input type="file" name="lampiran" id="lampiran" class="w-full rounded-lg border text-sm"
+                            required />
                     </div>
                 </div>
                 <!-- Modal footer -->
