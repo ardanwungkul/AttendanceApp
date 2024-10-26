@@ -27,8 +27,14 @@
                             class="!text-center {{ $groupedAbsensi[$key]->statusGaji ? 'text-green-500' : 'text-red-500' }}">
                             {{ $groupedAbsensi[$key]->statusGaji ? 'Sudah dibayar' : 'Belum dibayar' }}</td>
                         <td class="!text-center">
-                            <a href="{{ route('absensi.show', ['nip' => $groupedAbsensi[$key][0]->karyawan_nip, 'tahun' => $tahun, 'minggu' => $minggu]) }}"
-                                class="text-blue-500 hover:underline">Lihat Detail</a>
+                            <div class="flex justify-center">
+                                <a href="{{ route('absensi.show', ['nip' => $groupedAbsensi[$key][0]->karyawan_nip, 'tahun' => $tahun, 'minggu' => $minggu]) }}"
+                                    class="bg-green-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90 w-fit">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <span> Lihat detail
+                                    </span>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
