@@ -1,11 +1,6 @@
 <x-app-layout>
     <x-slot name="header">Daftar Gaji</x-slot>
     <div class="pb-4 relative pt-5">
-        <div class="pb-5">
-            <a href="{{ route('gaji.create') }}"
-                class="px-5 py-2 bg-mineral-green-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Tambah
-                Gaji</a>
-        </div>
         <table class="w-full border rounded-lg overflow-hidden" id="datatable">
             <thead class="bg-mineral-green-200 font-bold">
                 <tr>
@@ -22,9 +17,9 @@
                             {{ \Carbon\Carbon::parse($item->periode_akhir)->format('F j, Y') }}</td>
                         <td class="flex justify-center items-end gap-3 text-xs">
                             <a href="{{ route('gaji.list', [$item->periode_awal, $item->periode_akhir]) }}"
-                                class="bg-blue-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
-                                <i class="fa-solid fa-pen"></i>
-                                <span> Lihat Detail
+                                class="bg-green-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
+                                <i class="fa-solid fa-eye"></i>
+                                <span> Lihat detail
                                 </span>
                             </a>
 
@@ -40,6 +35,7 @@
         $('#datatable').DataTable({
             info: false,
             lengthChange: false,
+            searching: false,
             language: {
                 'search': '',
                 'searchPlaceholder': 'Search for items'

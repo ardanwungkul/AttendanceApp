@@ -22,8 +22,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('no_hp');
+            $table->string('no_rekening')->default('')->nullable();
             $table->timestamps();
-        });
+        })
     }
 
     /**
