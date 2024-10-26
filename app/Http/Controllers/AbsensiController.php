@@ -176,6 +176,6 @@ class AbsensiController extends Controller
             ->where('periode_akhir', $endDate->subDays(2)->format('Y-m-d'))
             ->first();
         // Mengembsalikan view dengan data absensi yang diambil
-        return view('master.absensi.show', compact('absensi', 'tahun', 'minggu', 'startDate', 'endDate', 'nip', 'gaji'));
+        return view('master.absensi.show', compact('absensi', 'tahun', 'minggu', 'startDate', 'endDate', 'karyawan', 'gaji'));
     }
 }

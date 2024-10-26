@@ -42,11 +42,9 @@ class GajiController extends Controller
      */
     public function store(Request $request)
     {
-        $karyawan = Karyawan::findOrfail($request->nip);
-        $upahPerHari = $karyawan->divisi->upah_per_hari;
         $gaji = new Gaji();
         $gaji->karyawan_nip = $request->nip;
-        $gaji->total_gaji = $request->total_kerja * $upahPerHari;
+        $gaji->total_gaji = $request->total_gaji;
         $gaji->periode_awal = $request->periode_awal;
         $gaji->periode_akhir = $request->periode_akhir;
         $gaji->save();

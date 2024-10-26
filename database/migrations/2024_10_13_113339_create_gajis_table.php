@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('total_gaji');
             $table->date('periode_awal');
             $table->date('periode_akhir');
+            $table->enum('tipe_pembayaran',['transfer','tunai']);
             $table->timestamps();
         });
     }

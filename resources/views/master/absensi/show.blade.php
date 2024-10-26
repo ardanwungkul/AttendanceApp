@@ -39,17 +39,46 @@
         </table>
         <div class="py-5 flex items-center justify-end">
             @if (Auth::user()->role !== 'karyawan' && !$gaji)
-                <form action="{{ route('gaji.store') }}" method="post">
-                    @csrf
-                    @method('POST')
-                    <input hidden type="text" name="nip" value="{{ $nip }}">
-                    <input hidden type="number" name="total_kerja" id="total_kerja">
-                    <input hidden type="date" name="periode_awal" value="{{ $startDate->format('Y-m-d') }}">
-                    <input hidden type="date" name="periode_akhir" value="{{ $endDate->format('Y-m-d') }}">
-                    <button type="submit"
-                        class="px-5 py-2 bg-blue-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Bayar
-                        Gaji</button>
-                </form>
+                <button type="submit" data-modal-target="gaji-modal" data-modal-toggle="gaji-modal"
+                    class="px-5 py-2 bg-blue-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Bayar
+                    Gaji</button>
+                <div id="gaji-modal" tabindex="-1" aria-hidden="true"
+                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div class="relative p-4 w-full max-w-2xl max-h-full">
+                        <form action="{{ route('gaji.store') }}" method="post"
+                            class="relative bg-white rounded-lg shadow dark:bg-gray-700 py-3 px-6">
+                            @csrf
+                            @method('POST')
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+                                Pilih Tipe Pembayaran Gaji
+                            </h3>
+                            <div class="mb-3 ">
+                                <x-input-label for="tipe_pembayaran" :value="__('Tipe Pembayaran')" />
+                                <select
+                                    class="w-full border-gray-300 focus:border-mineral-green-500 focus:ring-mineral-green-500 rounded-md shadow-sm"
+                                    id="tipe_pembayaran" name="tipe_pembayaran" class="block mt-1 w-full" required>
+                                    <option value="tunai">Tunai</option>
+                                    <option value="transfer">Transfer</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 ">
+                                <x-input-label for="total_gaji" :value="__('Total Pembayaran Gaji ')" />
+
+                                <input readonly
+                                    class="block mt-1 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-mineral-green-500 dark:focus:border-mineral-green-600 focus:ring-mineral-green-500 dark:focus:ring-mineral-green-600 rounded-md shadow-sm"
+                                    type="number" name="total_gaji" id="total_gaji">
+                            </div>
+                            <input hidden type="text" name="nip" value="{{ $karyawan->nip }}">
+                            <input hidden type="date" name="periode_awal" value="{{ $startDate->format('Y-m-d') }}">
+                            <input hidden type="date" name="periode_akhir" value="{{ $endDate->format('Y-m-d') }}">
+                            <div class="w-full flex justify-end ">
+                                <button type="submit"
+                                    class="px-5 py-2 bg-blue-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Bayar
+                                    Gaji</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             @elseif ($gaji)
                 <a href="{{ route('gaji.show', ['tahun' => $tahun, 'minggu' => $minggu, 'gaji' => $gaji->id]) }}"
                     class="px-5 py-2 bg-mineral-green-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Lihat
@@ -61,8 +90,9 @@
 </x-app-layout>
 
 <script>
-    let totalKerjaInput = document.getElementById('total_kerja')
+    let totalGaji = document.getElementById('total_gaji')
     const absensi = JSON.parse('{!! json_encode($absensi) !!}')
+    const upah = JSON.parse('{!! json_encode($karyawan->divisi->upah_per_hari) !!}')
     const getTotalKerja = (absen) => {
         let total = 0;
         for (let i = 0; i < absen.length; i++) {
@@ -70,7 +100,7 @@
                 total++
             }
         }
-        totalKerjaInput.value = total
+        totalGaji.value = total * upah;
     }
     getTotalKerja(absensi)
 </script>
