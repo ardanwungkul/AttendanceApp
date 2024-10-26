@@ -40,14 +40,14 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make(12345678)
         ]);
         Divisi::create([
-            'nama_divisi' => 'Manajer'
+            'nama_divisi' => 'Manajer',
+            'upah_per_hari'=> 50000
         ]);
 
         Pengaturan::create([
             'jam_masuk' => '09:00:00',
             'jam_keluar' => '17:30:00',
             'batas_waktu' => '12:00:00',
-            'upah_per_hari' => '3000000',
             'latitude' => '-7.0501997112200705',
             'longitude' => '107.75985479634787',
             'radius' => '3000000',

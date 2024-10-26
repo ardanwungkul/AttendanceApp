@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absensi;
+use App\Models\Divisi;
 use App\Models\Gaji;
 use App\Models\Karyawan;
 use App\Models\Pengaturan;
@@ -41,7 +42,8 @@ class GajiController extends Controller
      */
     public function store(Request $request)
     {
-        $upahPerHari = Pengaturan::first()->upah_per_hari;
+        $karyawan = Karyawan::findOrfail($request->nip);
+        $upahPerHari = $karyawan->divisi->upah_per_hari;
         $gaji = new Gaji();
         $gaji->karyawan_nip = $request->nip;
         $gaji->total_gaji = $request->total_kerja * $upahPerHari;

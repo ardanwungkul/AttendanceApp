@@ -16,7 +16,6 @@ return new class extends Migration
             $table->time('jam_masuk');
             $table->time('jam_keluar');
             $table->time('batas_waktu');
-            $table->integer('upah_per_hari');
             $table->string('latitude');
             $table->string('longitude');
             $table->string('radius');
