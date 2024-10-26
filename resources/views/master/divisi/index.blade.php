@@ -11,6 +11,7 @@
                 <tr>
                     <td class="!text-center w-10">No</td>
                     <td>Nama Divisi</td>
+                    <td>Upah per Hari</td>
                     <td class="!text-center !w-48">Aksi</td>
                 </tr>
             </thead>
@@ -19,6 +20,7 @@
                     <tr>
                         <td class="text-center">{{ $loop->index + 1 }}</td>
                         <td>{{ $item->nama_divisi }}</td>
+                        <td> Rp.<span>{{ number_format($item->upah_per_hari, 0, ',', '.') }}</span></td>
                         <td class="flex justify-center items-end gap-3 text-xs">
                             <a href="{{ route('divisi.edit', $item->id) }}"
                                 class="bg-blue-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
