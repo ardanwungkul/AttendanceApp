@@ -52,27 +52,36 @@
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">
                                 Pilih Tipe Pembayaran Gaji
                             </h3>
-                            <div class="mb-3 ">
+                            <div class="mb-3">
                                 <x-input-label for="tipe_pembayaran" :value="__('Tipe Pembayaran')" />
-                                <select
-                                    class="w-full border-gray-300 focus:border-mineral-green-500 focus:ring-mineral-green-500 rounded-md shadow-sm"
-                                    id="tipe_pembayaran" name="tipe_pembayaran" class="block mt-1 w-full" required>
+                                <select id="tipe_pembayaran" name="tipe_pembayaran" required
+                                    class="w-full border-gray-300 focus:border-mineral-green-500 focus:ring-mineral-green-500 rounded-md shadow-sm">
                                     <option value="tunai">Tunai</option>
                                     <option value="transfer">Transfer</option>
                                 </select>
-                            </div>
-                            <div class="mb-3 ">
-                                <x-input-label for="total_gaji" :value="__('Total Pembayaran Gaji ')" />
 
-                                <input readonly
-                                    class="block mt-1 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-mineral-green-500 dark:focus:border-mineral-green-600 focus:ring-mineral-green-500 dark:focus:ring-mineral-green-600 rounded-md shadow-sm"
-                                    type="number" name="total_gaji" id="total_gaji">
+                                <!-- Display account number if it exists -->
+                                @if ($karyawan->no_rekening)
+                                    <p id="rekeningInfo" class="text-gray-600 mt-2">No Rekening:
+                                        {{ $karyawan->no_rekening }}</p>
+                                @else
+                                    <p id="rekeningWarning" class="text-red-500 hidden mt-2">* No Rekening tidak
+                                        tersedia untuk transfer.</p>
+                                @endif
                             </div>
+
+                            <div class="mb-3">
+                                <x-input-label for="total_gaji" :value="__('Total Pembayaran Gaji ')" />
+                                <input readonly type="number" name="total_gaji" id="total_gaji"
+                                    class="block mt-1 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-mineral-green-500 dark:focus:border-mineral-green-600 focus:ring-mineral-green-500 dark:focus:ring-mineral-green-600 rounded-md shadow-sm">
+                            </div>
+
+                            <!-- Hidden Inputs -->
                             <input hidden type="text" name="nip" value="{{ $karyawan->nip }}">
                             <input hidden type="date" name="periode_awal" value="{{ $startDate->format('Y-m-d') }}">
                             <input hidden type="date" name="periode_akhir" value="{{ $endDate->format('Y-m-d') }}">
-                            <div class="w-full flex justify-end ">
-                                <button type="submit"
+                            <div class="w-full flex justify-end">
+                                <button id="submitButton" type="submit"
                                     class="px-5 py-2 bg-blue-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Bayar
                                     Gaji</button>
                             </div>
@@ -88,6 +97,23 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    const noRekening = JSON.parse('{!! json_encode($karyawan->no_rekening) !!}');
+
+    document.getElementById('tipe_pembayaran').addEventListener('change', function() {
+        const submitButton = document.getElementById('submitButton');
+        const rekeningWarning = document.getElementById('rekeningWarning');
+
+        if (this.value === 'transfer' && !noRekening) {
+            submitButton.disabled = true;
+            rekeningWarning.classList.remove('hidden');
+        } else {
+            submitButton.disabled = false;
+            rekeningWarning && rekeningWarning.classList.add('hidden');
+        }
+    });
+</script>
 
 <script>
     let totalGaji = document.getElementById('total_gaji')

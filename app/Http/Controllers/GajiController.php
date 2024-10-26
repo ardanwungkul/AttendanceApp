@@ -47,6 +47,7 @@ class GajiController extends Controller
         $gaji->total_gaji = $request->total_gaji;
         $gaji->periode_awal = $request->periode_awal;
         $gaji->periode_akhir = $request->periode_akhir;
+        $gaji->tipe_pembayaran = $request->tipe_pembayaran;
         $gaji->save();
         return redirect()->back()->with(['success' => 'Berhasil Melakukan Pembayaran']);
     }
