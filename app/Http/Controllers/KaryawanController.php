@@ -53,7 +53,6 @@ class KaryawanController extends Controller
         ]);
         $newUser->save();
         $nip = IdGenerator::generate(['table' => 'karyawans', 'field' => 'nip', 'length' => 9, 'prefix' => date('ym')]);
-        // dd($nip);
         Karyawan::create([
             'nip' => $nip,
             'nama_lengkap' => $request->nama_lengkap,
