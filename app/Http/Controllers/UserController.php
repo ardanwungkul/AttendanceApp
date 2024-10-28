@@ -80,7 +80,7 @@ class UserController extends Controller
                 'no_hp' => $request->no_hp,
             ]);
         }
-        return redirect()->route('pengguna.index')->with(['success' => 'Berhasil Mengubah Divisi']);
+        return redirect()->route('pengguna.index')->with(['success' => 'Berhasil Mengubah Pengguna']);
     }
     public function destroy(User $pengguna)
     {

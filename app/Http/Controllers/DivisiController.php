@@ -32,9 +32,11 @@ class DivisiController extends Controller
     {
         $request->validate([
             'nama_divisi' => 'required|unique:divisis',
+            'upah_per_hari' => 'required',
         ]);
         $divisi = new Divisi();
         $divisi->nama_divisi = $request->nama_divisi;
+        $divisi->upah_per_hari = $request->upah_per_hari;
         $divisi->save();
         return redirect()->route('divisi.index')->with(['success' => 'Berhasil Menambahkan Divisi']);
     }
@@ -65,8 +67,10 @@ class DivisiController extends Controller
                 'required',
                 Rule::unique('divisis')->ignore($divisi->id),
             ],
+            'upah_per_hari' => 'required',
         ]);
         $divisi->nama_divisi = $request->nama_divisi;
+        $divisi->upah_per_hari = $request->upah_per_hari;
         $divisi->save();
         return redirect()->route('divisi.index')->with(['success' => 'Berhasil Mengubah Divisi']);
     }

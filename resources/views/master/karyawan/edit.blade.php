@@ -61,8 +61,7 @@
             <div>
                 <x-input-label for="no_rekening" :value="__('No Rekening')" />
                 <x-text-input id="no_rekening" class="block mt-1 w-full" type="text" name="no_rekening"
-                    :value="old('no_rekening')" required autofocus autocomplete="no_rekening"
-                    placeholder="Masukkan No Rekening" />
+                    :value="old('no_rekening', $karyawan->no_rekening)" autofocus autocomplete="no_rekening" placeholder="Masukkan No Rekening" />
                 <p class="text-sm text-gray-500 mt-2">Contoh: 1234239 (BCA)</p>
                 <x-input-error :messages="$errors->get('no_rekening')" class="mt-2" />
             </div>
