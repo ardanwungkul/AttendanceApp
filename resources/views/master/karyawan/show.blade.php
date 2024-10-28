@@ -23,6 +23,10 @@
                 <x-input-label for="no_hp" :value="__('No HP')" />
                 <p class="text-lg">{{ $karyawan->no_hp }}</p>
             </div>
+            <div>
+                <x-input-label for="no_rekening" :value="__('No Rekening')" />
+                <p class="text-lg">{{ $karyawan->no_rekening }}</p>
+            </div>
         </section>
         <section class="py-4">
             <div class="border-b pb-3 border-mineral-green-200 mb-4">

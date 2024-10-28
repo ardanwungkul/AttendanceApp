@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">Tambah Divisi</x-slot>
+    <x-slot name="header">Edit Divisi</x-slot>
     <form action="{{ route('divisi.update', $divisi->id) }}" method="POST">
         @csrf
         @method('PUT')
