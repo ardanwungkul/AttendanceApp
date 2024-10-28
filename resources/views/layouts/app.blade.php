@@ -48,7 +48,7 @@
                 </div>
                 <button type="button"
                     class="close-btn ms-auto -my-1.5 bg-white  text-red-500 hover:text-red-400 rounded-lg focus:ring-2  inline-flex items-center justify-center h-8 w-8"
-                    data-dismiss-target="#toast-danger" aria-label="Close">
+                    aria-label="Close">
                     <span class="sr-only">Close</span>
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 14 14">
@@ -79,7 +79,7 @@
                 </div>
                 <button type="button"
                     class="close-btn ms-auto -my-1.5 bg-white  text-green-500 hover:text-green-400 rounded-lg focus:ring-2  inline-flex items-center justify-center h-8 w-8"
-                    data-dismiss-target="#toast-danger" aria-label="Close">
+                    aria-label="Close">
                     <span class="sr-only">Close</span>
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 14 14">

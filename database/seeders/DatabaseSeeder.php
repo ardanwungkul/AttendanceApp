@@ -39,6 +39,11 @@ class DatabaseSeeder extends Seeder
             'role' => 'karyawan',
             'password' => Hash::make(12345678)
         ]);
+        User::create([
+            'username' => 'taufikyuki',
+            'role' => 'karyawan',
+            'password' => Hash::make(1)
+        ]);
         Divisi::create([
             'nama_divisi' => 'Manajer',
             'upah_per_hari'=> 50000
@@ -73,7 +78,7 @@ class DatabaseSeeder extends Seeder
             'tempat_lahir' => 'Bandung',
             'tanggal_lahir' => Carbon::create('1920', '01', '15'),
             'divisi_id' => 1,
-            'user_id' => 3,
+            'user_id' => 4,
             'no_hp' => '081234567890',
             'no_rekening' => '',
             'created_at' => Carbon::now(),

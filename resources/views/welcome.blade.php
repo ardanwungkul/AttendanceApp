@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="">
+    <div class="hidden">
         <div class="flex flex-col items-center gap-3">
             <input type="time" id="time-input" class="border rounded-lg py-1 px-3 text-gray-800" />
         </div>

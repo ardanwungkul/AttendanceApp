@@ -28,16 +28,39 @@
                                 <span> Edit
                                 </span>
                             </a>
-                            <form action="{{ route('pengguna.destroy', $item->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                    class="bg-red-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
-                                    <i class="fa-solid fa-trash"></i>
-                                    <span> Delete
-                                    </span>
-                                </button>
-                            </form>
+                            <button data-modal-target="{{ 'user-modal' . $item->id }}"
+                                data-modal-toggle="{{ 'user-modal' . $item->id }}"
+                                class="bg-red-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
+                                <i class="fa-solid fa-trash"></i>
+                                <span> Delete
+                                </span>
+                            </button>
+                            <div id="{{ 'user-modal' . $item->id }}" tabindex="-1" aria-hidden="true"
+                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                <div class="relative p-4 w-full max-w-2xl max-h-full">
+                                    <form action="{{ route('pengguna.destroy', $item->id) }}" method="POST"
+                                        class="relative bg-white rounded-lg shadow dark:bg-gray-700 py-3 px-6">
+                                        @csrf
+                                        @method('DELETE')
+                                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                                            Hapus Pengguna ini?
+                                        </h3>
+                                        <p class="text-base text-gray-600 mb-3">
+                                            Apakah kamu yakin untuk menghapus {{ $item->username }} ?
+                                        </p>
+                                        <div class="w-full flex items-center justify-end gap-x-3">
+                                            <button type="submit"
+                                                class="bg-red-500 px-6 py-2 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90 text-base">
+                                                Hapus
+                                            </button>
+                                            <div data-modal-hide="{{ 'user-modal' . $item->id }}"
+                                                class="bg-gray-200 px-6 py-2 rounded-lg text-gray-800 flex gap-2 items-center hover:bg-opacity-90 text-base cursor-pointer">
+                                                Tidak
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
