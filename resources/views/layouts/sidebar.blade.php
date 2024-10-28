@@ -14,14 +14,17 @@
                         <span class="text-sm font-medium">Dashboard</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('pengguna.index') }}"
-                        class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
-                        <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i
-                                class="fa-solid fa-users"></i></span>
-                        <span class="text-sm font-medium">Pengguna</span>
-                    </a>
-                </li>
+                @if (Auth::user()->role == 'super_admin')
+                    <li>
+                        <a href="{{ route('pengguna.index') }}"
+                            class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
+                            <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i
+                                    class="fa-solid fa-users"></i></span>
+                            <span class="text-sm font-medium">Pengguna</span>
+                        </a>
+                    </li>
+                @endif
+
                 <li>
                     <a href="{{ route('divisi.index') }}"
                         class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
