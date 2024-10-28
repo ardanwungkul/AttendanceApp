@@ -1,12 +1,12 @@
 <x-guest-layout>
     <div
-        class="max-w-3xl mx-auto flex justify-between gap-x-6 px-8 py-6 bg-white dark:bg-gray-50 shadow-md overflow-hidden sm:rounded-lg max-h-[80vh]">
-        <div class="w-1/2 relative rounded-xl overflow-hidden">
+        class="max-w-3xl mx-auto flex justify-between gap-x-6 px-8 py-6 bg-white dark:bg-gray-50 shadow-md overflow-hidden rounded-lg max-h-[80vh]">
+        <div class="sm:w-1/2 w-full relative rounded-xl overflow-hidden hidden sm:block">
             <div class="absolute w-full h-full bg-mineral-green-500/30"></div>
             <img src="https://images.unsplash.com/photo-1617191562585-f6a64bf68df0?q=80&w=1527&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="catering-illustration">
         </div>
-        <div class="w-1/2 flex flex-col justify-center">
+        <div class="sm:w-1/2 w-full flex flex-col justify-center">
             <div class="mb-3">
                 <x-application-logo />
                 <h3 class="text-gray-600 tracking-tight mt-1">Selamat Datang di CV Budi Abadi !
