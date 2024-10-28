@@ -68,7 +68,6 @@
                                     <option value="transfer">Transfer</option>
                                 </select>
 
-                                <!-- Display account number if it exists -->
                                 @if ($karyawan->no_rekening)
                                     <p id="rekeningInfo" class="text-gray-600 mt-2">No Rekening:
                                         {{ $karyawan->no_rekening }}</p>
@@ -84,7 +83,6 @@
                                     class="block mt-1 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-mineral-green-500 dark:focus:border-mineral-green-600 focus:ring-mineral-green-500 dark:focus:ring-mineral-green-600 rounded-md shadow-sm">
                             </div>
 
-                            <!-- Hidden Inputs -->
                             <input hidden type="text" name="nip" value="{{ $karyawan->nip }}">
                             <input hidden type="date" name="periode_awal" value="{{ $startDate->format('Y-m-d') }}">
                             <input hidden type="date" name="periode_akhir" value="{{ $endDate->format('Y-m-d') }}">
