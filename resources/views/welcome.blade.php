@@ -1,6 +1,8 @@
 <x-app-layout>
-    <div class="flex flex-col items-center gap-3">
-        <input type="time" id="time-input" class="border rounded-lg py-1 px-3 text-gray-800" />
+    <div class="">
+        <div class="flex flex-col items-center gap-3">
+            <input type="time" id="time-input" class="border rounded-lg py-1 px-3 text-gray-800" />
+        </div>
     </div>
     @if (\Carbon\Carbon::now()->isWeekday())
         <div class="space-y-3">
@@ -49,7 +51,7 @@
                 </div>
             @else
                 @if (!$absensi->jam_keluar && $absensi->status == 'hadir')
-                    <div class="flex flex-col items-center gap-3" id="check-out">
+                    <div class="flex flex-col items-center gap-3" style="display: none;" id="check-out">
                         <form action="{{ route('absensi.store') }}" method="post" class="w-full max-w-40">
                             @csrf
                             @method('POST')
@@ -75,7 +77,7 @@
     let currentHour, currentMinute;
     let timeOffset = 0;
     const batas_waktu = JSON.parse('{!! json_encode($pengaturan->batas_waktu) !!}')
-
+    const jam_pulang = JSON.parse('{!! json_encode($pengaturan->jam_keluar) !!}')
 
     function updateClock() {
         var now = new Date();
@@ -97,14 +99,32 @@
 
         var currentTime = now.getHours() * 3600 + now.getMinutes() * 60 + now
             .getSeconds();
-        var batasWaktuParts = batas_waktu.split(':');
-        var batasWaktuInSeconds = parseInt(batasWaktuParts[0]) * 3600 + parseInt(batasWaktuParts[1]) * 60 + parseInt(
-            batasWaktuParts[2]);
-        if (currentTime < batasWaktuInSeconds) {
-            document.getElementById('check-in').style.display = 'flex';
-        } else {
-            document.getElementById('check-in').style.display = 'none';
-        }
+
+        @if (!$absensi)
+            var batasWaktuParts = batas_waktu.split(':');
+            var batasWaktuInSeconds = parseInt(batasWaktuParts[0]) * 3600 + parseInt(batasWaktuParts[1]) * 60 +
+                parseInt(
+                    batasWaktuParts[2]);
+            if (currentTime < batasWaktuInSeconds) {
+                document.getElementById('check-in').style.display = 'flex';
+            } else {
+                document.getElementById('check-in').style.display = 'none';
+            }
+        @else
+            @if (!$absensi->jam_keluar && $absensi->status == 'hadir')
+                var jamPulangParts = jam_pulang.split(':');
+                var jamPulangInSeconds = parseInt(jamPulangParts[0]) * 3600 + parseInt(jamPulangParts[1]) * 60 +
+                    parseInt(
+                        jamPulangParts[2]);
+
+                if (currentTime > jamPulangInSeconds) {
+                    document.getElementById('check-out').style.display = 'flex';
+                } else {
+                    document.getElementById('check-out').style.display = 'none';
+                }
+            @endif
+        @endif
+
     }
     document.getElementById('time-input').addEventListener('change', function() {
         const timeValue = this.value;

@@ -1,38 +1,46 @@
 <x-app-layout>
     <x-slot name="header">Detail Absensi Minggu ke-{{ $minggu }} Tahun {{ $tahun }}</x-slot>
     <div class="pb-4 relative pt-6">
-        <div class="pb-5 flex items-center justify-between">
-            <h6 class="text-lg font-semibold">Status Pembayaran : <span
+        <div class="pb-5 flex sm:flex-row flex-col gap-3 sm:gap-0 sm:items-center items-start justify-between">
+            <h6 class="sm:text-lg text-sm font-semibold">Status Pembayaran : <span
                     class="{{ $gaji ? 'text-green-500' : 'text-red-500' }}">{{ $gaji ? 'Sudah Dibayar' : 'Belum Dibayar' }}</span>
             </h6>
             <a href="{{ url()->previous() }}"
-                class="px-5 py-2 bg-mineral-green-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Kembali</a>
+                class="px-5 py-2 text-sm sm:text-base bg-mineral-green-500 rounded-lg shadow-lg text-white hover:bg-opacity-90">Kembali</a>
         </div>
-        <table class="w-full border rounded-lg overflow-hidden" id="datatable">
+        <table class="w-full border rounded-lg overflow-hidden shadow-lg" id="datatable">
             <thead class="bg-mineral-green-200 font-bold">
                 <tr>
-                    <td class="!text-center">No</td>
-                    <td class="!text-center">Tanggal Kerja</td>
-                    <td class="!text-center">Jam Masuk</td>
-                    <td class="!text-center">Jam Keluar</td>
-                    <td class="!text-center">Status</td>
-                    <td class="!text-center">Keterangan</td>
+                    <th class="!text-center text-xs sm:text-base">No</th>
+                    <th class="!text-center text-xs sm:text-base">Tanggal Kerja</th>
+                    <th class="!text-center text-xs sm:text-base">Jam Masuk</th>
+                    <th class="!text-center text-xs sm:text-base">Jam Keluar</th>
+                    <th class="!text-center text-xs sm:text-base">Status</th>
+                    <th class="!text-center text-xs sm:text-base">Keterangan</th>
                 </tr>
             </thead>
             <tbody>
                 @php $no = 1; @endphp
                 @foreach ($absensi as $item)
                     <tr>
-                        <td class="!text-center">{{ $no++ }}</td>
-                        <td class="!text-center">{{ $item->tanggal_kerja }}</td>
-                        <td class="!text-center">{{ $item->jam_masuk }}</td>
-                        <td class="!text-center">{{ $item->jam_keluar }}</td>
-                        <td class="!text-center">
-                            <p
-                                class="py-1 px-2 rounded-full capitalize font-semibold {{ $item->status === 'hadir' ? 'bg-green-300 text-green-700' : 'bg-red-300 text-red-700' }}">
-                                {{ $item->status }}</p>
+                        <td class="!text-center text-xs sm:text-base">{{ $no++ }}</td>
+                        <td class="!text-center text-xs sm:text-base">{{ $item->tanggal_kerja }}</td>
+                        <td class="!text-center text-xs sm:text-base">{{ $item->jam_masuk }}</td>
+                        <td class="!text-center text-xs sm:text-base">{{ $item->jam_keluar }}</td>
+                        <td class="!text-center text-xs sm:text-base ">
+                            <div
+                                class="w-full py-1 px-3 rounded-full flex gap-1 {{ $item->status === 'hadir' ? 'bg-green-300 text-green-700' : 'bg-red-300 text-red-700' }}">
+                                <p class="capitalize font-semibold w-full">
+                                    {{ $item->status }}
+                                </p>
+                                @if ($item->lampiran)
+                                    <a target="_blank" href="{{ route('download.lampiran', $item->id) }}">
+                                        <i class="fa-solid fa-download"></i>
+                                    </a>
+                                @endif
+                            </div>
                         </td>
-                        <td class="!text-center">{{ $item->keterangan }}</td>
+                        <td class="!text-center text-xs sm:text-base">{{ $item->keterangan }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -86,6 +94,24 @@
                 'search': '',
                 'searchPlaceholder': 'Search for items'
             },
+            responsive: {
+                details: {
+                    renderer: function(api, rowIdx, columns) {
+                        let data = columns.map((col) => {
+                            return col.hidden ?
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' +
+                                col.columnIndex + '">' +
+                                '<td class="text-xs sm:text-base">' + col.title + ':</td>' +
+                                '<td class="text-xs sm:text-base">' + col.data + '</td>' +
+                                '</tr>' :
+                                '';
+                        }).join('');
+
+                        return data ? $('<table/>').append(data) : false;
+                    }
+                }
+            },
+
         });
     })
 </script>

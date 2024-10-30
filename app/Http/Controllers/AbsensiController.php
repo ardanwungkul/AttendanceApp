@@ -8,15 +8,18 @@ use App\Models\Gaji;
 use App\Models\Karyawan;
 use App\Models\Pengaturan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Iroid\LaravelHaversine\Haversine;
+use Yajra\DataTables\DataTables;
 
 class AbsensiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $idUser = Auth::user()->id;
         $karyawan = Karyawan::where('user_id', $idUser)->first();
@@ -60,7 +63,11 @@ class AbsensiController extends Controller
             // Menambahkan statusGaji pada groupedAbsensi
             $groupedAbsensi[$key]->statusGaji = $gaji ? true : false;
         }
-
+        if ($request->ajax()) {
+            return DataTables::of($groupedAbsensi)
+                ->addIndexColumn()
+                ->make(true);
+        }
 
         // Mengembalikan bulan, tahun, periode minggu, dan rentang tanggal
         return view('master.absensi.index', compact('groupedAbsensi', 'rentangTanggal'));
@@ -177,5 +184,15 @@ class AbsensiController extends Controller
             ->first();
         // Mengembsalikan view dengan data absensi yang diambil
         return view('master.absensi.show', compact('absensi', 'tahun', 'minggu', 'startDate', 'endDate', 'nip', 'gaji'));
+    }
+    public function download(Absensi $absensi)
+    {
+        $path = public_path('storage/lampiran/' . $absensi->lampiran);
+
+        if (File::exists($path)) {
+            return Response::download($path);
+        } else {
+            return abort(404, 'File not found.');
+        }
     }
 }

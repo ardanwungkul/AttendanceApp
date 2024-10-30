@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/absensi/{nip}/{tahun}/{minggu}', [AbsensiController::class, 'show'])->name('absensi.show');
     Route::get('/gaji/detail/{tahun}/{minggu}/{gaji}', [GajiController::class, 'show'])->name('gaji.show');
     Route::get('/gaji/list/{awal}/{akhir}', [GajiController::class, 'list'])->name('gaji.list');
+    Route::get('download/lampiran/{absensi}', [AbsensiController::class, 'download'])->name('download.lampiran');
 });
 
 require __DIR__ . '/auth.php';
