@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">Daftar Gaji</x-slot>
-    <div class="pb-4 relative pt-12">
+    <div class="pb-4 relative pt-16">
         <table class="w-full border rounded-lg overflow-hidden" id="datatable">
             <thead class="bg-mineral-green-200 font-bold">
                 <tr>
@@ -21,9 +21,9 @@
                         <td class="text-center">Rp.<span>{{ number_format($item->total_gaji, 0, ',', '.') }}</span></td>
                         <td class="flex justify-center items-end gap-3 text-xs">
                             <a href="{{ route('gaji.show', ['tahun' => \Carbon\Carbon::parse($item->periode_akhir)->format('Y'), 'minggu' => \Carbon\Carbon::parse($item->periode_akhir)->weekOfYear, 'gaji' => $item->id]) }}"
-                                class="bg-blue-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
-                                <i class="fa-solid fa-pen"></i>
-                                <span> Lihat Detail
+                                class="bg-green-500 px-3 py-1 rounded-lg text-white flex gap-2 items-center hover:bg-opacity-90">
+                                <i class="fa-solid fa-eye"></i>
+                                <span> Lihat detail
                                 </span>
                             </a>
 

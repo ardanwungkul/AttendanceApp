@@ -38,8 +38,8 @@
                     <p class="text-lg">{{ $karyawan->divisi->nama_divisi }}</p>
                 </div>
                 <div>
-                    <x-input-label for="tempat_lahir" :value="__('Status')" />
-                    <p class="text-lg">Sudah Dibayar</p>
+                    <x-input-label for="tempat_lahir" :value="__('Status & Tipe Pembayaran')" />
+                    <p class="text-lg">Sudah Dibayar - <span class="capitalize">{{ $gaji->tipe_pembayaran }}</span></p>
                 </div>
                 <div>
                     <x-input-label for="tanggal_lahir" :value="__('Periode Awal')" />
@@ -87,7 +87,7 @@
                         <h3>Tertanda</h3>
                         <br />
                         <br />
-                        <h3>Taufik Yahya</h3>
+                        <h3>Direktur CV Budi Abadi</h3>
                     </div>
                 </div>
             </section>

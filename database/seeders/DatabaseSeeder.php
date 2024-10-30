@@ -40,14 +40,14 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make(12345678)
         ]);
         Divisi::create([
-            'nama_divisi' => 'Manajer'
+            'nama_divisi' => 'Manajer',
+            'upah_per_hari'=> 50000
         ]);
 
         Pengaturan::create([
             'jam_masuk' => '09:00:00',
             'jam_keluar' => '17:30:00',
             'batas_waktu' => '12:00:00',
-            'upah_per_hari' => '3000000',
             'latitude' => '-7.0501997112200705',
             'longitude' => '107.75985479634787',
             'radius' => '3000000',
@@ -62,6 +62,20 @@ class DatabaseSeeder extends Seeder
             'divisi_id' => 1,
             'user_id' => 3,
             'no_hp' => '081234567890',
+            'no_rekening' => '123123123 (BCA)',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        DB::table('karyawans')->insert([
+            'nip' => '1231231',
+            'nama_lengkap' => 'Taufik Juki',
+            'jenis_kelamin' => 'Laki Laki',
+            'tempat_lahir' => 'Bandung',
+            'tanggal_lahir' => Carbon::create('1920', '01', '15'),
+            'divisi_id' => 1,
+            'user_id' => 3,
+            'no_hp' => '081234567890',
+            'no_rekening' => '',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -83,7 +97,7 @@ class DatabaseSeeder extends Seeder
                 'jam_keluar' => Carbon::createFromTime(17, 30, 0),
                 'keterangan' => 'Terlambat masuk',
                 'status' => 'hadir',
-                'karyawan_nip' => '123',
+                'karyawan_nip' => '1231231',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],

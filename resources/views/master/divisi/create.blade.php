@@ -5,9 +5,14 @@
         @method('POST')
         <div class="pt-4 space-y-4">
             <div class="">
-                <x-input-label for="nama_divisi" :value="__('Nama Divisi')" />
+                <x-input-label for="nama_divisi" :value="__('Nama ')" />
                 <x-text-input id="nama_divisi" class="block mt-1 w-full text-sm" type="text" name="nama_divisi" required
                     autofocus placeholder="Masukkan Nama Divisi" />
+            </div>
+            <div class="">
+                <x-input-label for="upah_per_hari" :value="__('Upah per Hari')" />
+                <x-text-input id="upah_per_hari" class="block mt-1 w-full text-sm" type="number" name="upah_per_hari"
+                    required autofocus placeholder="Masukkan Upah per Hari" />
             </div>
 
             <div class="flex justify-end">

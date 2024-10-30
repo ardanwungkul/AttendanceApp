@@ -62,7 +62,8 @@ class KaryawanController extends Controller
             'tanggal_lahir' => $request->tanggal_lahir,
             'divisi_id' => $request->divisi_id,
             'no_hp' => $request->no_hp,
-            'user_id' => $newUser->id
+            'user_id' => $newUser->id,
+            'no_rekening' => $request->no_rekening
         ]);
 
         // Redirect ke halaman yang diinginkan dengan pesan sukses
@@ -148,6 +149,7 @@ class KaryawanController extends Controller
             'tanggal_lahir' => $request->tanggal_lahir,
             'divisi_id' => $request->divisi_id,
             'no_hp' => $request->no_hp,
+            'no_rekening' => $request->no_rekening
         ]);
 
         return redirect()->route('karyawan.index')->with(['success', 'Data karyawan berhasil diperbarui.']);
